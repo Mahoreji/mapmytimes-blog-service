@@ -64,7 +64,7 @@ EXPOSE 8090
 # HEALTH CHECK (uses Spring Boot actuator)
 # ---------------------------------------
 HEALTHCHECK --interval=30s --timeout=10s --start-period=120s --retries=5 \
-  CMD curl -f http://localhost:8090/actuator/health || exit 1
+  CMD curl -f http://localhost:5052/actuator/health || exit 1
 
 # ---------------------------------------
 # JVM & SPRING BOOT OPTIMIZATION
@@ -80,7 +80,7 @@ ENV JAVA_OPTS="\
   -Dspring.profiles.active=prod"
 
 ENV SPRING_PROFILES_ACTIVE=prod
-ENV SERVER_PORT=8090
+ENV SERVER_PORT=5052
 ENV LOGGING_LEVEL_ROOT=INFO
 ENV LOGGING_LEVEL_IN_MAPMYTOUR_BLOG=INFO
 

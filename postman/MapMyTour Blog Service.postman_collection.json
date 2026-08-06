@@ -5,7 +5,7 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://127.0.0.1:8090" },
+    { "key": "baseUrl", "value": "http://127.0.0.1:5052" },
     { "key": "gatewayHeaderName", "value": "X-Request-Source" },
     { "key": "gatewayHeaderValue", "value": "api-gateway" },
     { "key": "authenticatedHeader", "value": "X-Authenticated" },
