@@ -54,6 +54,15 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
+                        // 👥 ================ STAFF / PRESS ID ENDPOINTS ================
+                        // 🔐 Reporter own-profile read (PRESS_REPORTER can access only own via /me)
+                        .requestMatchers("GET", "/api/v1/admin/staff/me").authenticated()
+                        .requestMatchers("GET", "/api/v1/admin/staff/*/download").authenticated()
+                        .requestMatchers("GET", "/api/v1/admin/staff/*/download/**").authenticated()
+                        // 👥 Staff public endpoints — NO auth needed
+                        .requestMatchers("GET", "/api/v1/staff/**").permitAll()
+                        // 🔐 Staff Admin CRUD + photo/signature upload
+                        .requestMatchers("/api/v1/admin/staff/**").hasAnyRole("ADMIN", "SUPER_ADMIN", "STAFF_ADMIN")
                         // 🔐 Authenticated endpoints - require JWT (user-specific GET endpoints - must come before wildcards)
                         .requestMatchers("GET", "/api/v1/blog/posts/my-posts").authenticated()
                         .requestMatchers("GET", "/api/v1/blog/posts/my-likes").authenticated()

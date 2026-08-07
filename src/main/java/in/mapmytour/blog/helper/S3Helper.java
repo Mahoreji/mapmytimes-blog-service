@@ -53,6 +53,12 @@ public class S3Helper {
 
     @PostConstruct
     public void initializeS3Client() {
+        if (accessKey == null || accessKey.isEmpty() || accessKey.startsWith("REPLACE_ME_") ||
+            secretKey == null || secretKey.isEmpty() || secretKey.startsWith("REPLACE_ME_")) {
+            log.warn("S3 credentials not configured (placeholder values detected). S3Helper will operate in degraded/no-op mode; upload/download calls will fail gracefully. Uploads via local filesystem fallback if enabled.");
+            this.s3Client = null;
+            return;
+        }
         try {
             AwsBasicCredentials awsCredentials = AwsBasicCredentials.create(accessKey, secretKey);
             this.s3Client = S3Client.builder()
@@ -60,12 +66,11 @@ public class S3Helper {
                     .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
                     .build();
 
-            // Create bucket if it doesn't exist
             createBucketIfNotExists();
             log.info("S3Client initialized successfully for bucket: {}", bucketName);
         } catch (Exception e) {
-            log.error("Failed to initialize S3Client: {}", e.getMessage(), e);
-            throw new RuntimeException("S3 initialization failed", e);
+            log.warn("Failed to initialize S3Client (degraded mode): {}. Upload/download calls will fail gracefully.", e.getMessage());
+            this.s3Client = null;
         }
     }
 

@@ -139,7 +139,7 @@ public class UserContextService {
                 request.getAttribute("jwt.userId"), 
                 request.getAttribute("jwt.email"), 
                 request.getAttribute("jwt.role"));
-        return "ADMIN".equalsIgnoreCase(role) || "SUPER_ADMIN".equalsIgnoreCase(role);
+        return "ADMIN".equalsIgnoreCase(role) || "SUPER_ADMIN".equalsIgnoreCase(role) || "STAFF_ADMIN".equalsIgnoreCase(role);
     }
 
     /**
